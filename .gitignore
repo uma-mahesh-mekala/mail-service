@@ -1,0 +1,6 @@
+mail-service-backend/node_modules
+mail-service-backend/.env
+mail-service-backend/package-lock.json
+mail-service-frontend/node_modules
+
+
