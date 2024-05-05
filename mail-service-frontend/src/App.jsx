@@ -5,6 +5,7 @@ function App() {
   const [subject, setSubject] = useState("");
   let [message, setMessage] = useState("");
   let [attachment, setAttachment] = useState("");
+  let [responseMessage, setResponseMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,44 +39,54 @@ function App() {
         "http://localhost:3001/api/mail",
         fetchOptions
       );
+
+      if (response.ok) {
+        setResponseMessage("Mail sent successfully");
+      } else {
+        setResponseMessage("Error sending mail");
+      }
       const result = await response.json();
-      console.log(result);
+      setResponseMessage(result.message);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
+      <header>
+        <h1>Mail Service</h1>
+      </header>
+      <p className="response-message">{responseMessage}</p>
+      <form onSubmit={handleSubmit} id="mail-form">
+        <label htmlFor="email">To Email:</label>
         <input
           type="email"
           name="email"
           id="email"
           value={email}
+          required
           onChange={(e) => setEmail(e.target.value)}
         />
-        <br />
-        <label htmlFor="subject">Subject</label>
+        <label htmlFor="subject">Subject:</label>
         <input
           type="text"
           name="subject"
           id="subject"
           value={subject}
+          required
           onChange={(e) => setSubject(e.target.value)}
         />
-        <br />
-        <label htmlFor="message">Message</label>
+        <label htmlFor="message">Message:</label>
         <textarea
           name="message"
           id="message"
           rows="5"
           columns="30"
           value={message}
+          required
           onChange={(e) => setMessage(e.target.value)}
         />
-        <br />
-        <label htmlFor="attachment">Attachment</label>
+        <label htmlFor="attachment">Attachment:</label>
         <input
           type="file"
           name="attachment"
@@ -83,7 +94,6 @@ function App() {
           value={attachment}
           onChange={(e) => setAttachment(e.target.value)}
         />
-        <br />
         <button type="submit">Submit</button>
       </form>
     </div>

@@ -31,22 +31,22 @@ module.exports = async (fastify) => {
         };
       } else {
         ({ email, message, subject } = request.body);
-      }
 
-      mailMessage = {
-        from: process.env.EMAIL,
-        to: email,
-        subject: subject,
-        text: message,
-        attachments: [],
-      };
+        mailMessage = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          text: message,
+          attachments: [],
+        };
+      }
 
       const mailTransporter = await fastify.mailTransporter();
       mailTransporter.sendMail(mailMessage);
-      reply.send({ message: "Mail sent successfully" });
+      reply.status(200).send({ message: "Mail sent successfully" });
     } catch (err) {
       console.log(err);
-      reply.send({ message: "Mail sent unsuccessful" });
+      reply.status(400).send({ message: "Sending Mail Failed" });
     }
   };
   const mailRoute = {
